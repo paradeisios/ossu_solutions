@@ -159,7 +159,6 @@ def hangman(secret_word):
       guess = input("Please guess a letter: ").lower()
       curr_ans = get_guessed_word(secret_word, letters_guessed)
 
-          
       if (not guess.isalpha()) or (guess in letters_guessed):
           
           if nWarning == 0:
@@ -197,17 +196,9 @@ def hangman(secret_word):
             
             if is_word_guessed(secret_word,letters_guessed):
                
-              total_score = len(set(secret_word))*nGuess
-
-              print("Congratulations, you have won!")
-              print(f"Your total score for this game is : {total_score}")
-               
               solved = True
-               
               
-            else:
-               
-              print(f"Good guess: {curr_ans}")
+            print(f"Good guess: {curr_ans}")
           
         else:
             
@@ -217,19 +208,27 @@ def hangman(secret_word):
               nGuess-=1
 
             if nGuess <= 0:
-               
-              print("I am sorry, you are out of guesses!")
-              print(f"Your secret word was: {secret_word}")
 
               solved = True
-            
-            else:
                
-              print(f"Oops! That letter is not in my word: {curr_ans}")
+            print(f"Oops! That letter is not in my word: {curr_ans}")
+
+      available_letters = get_available_letters(letters_guessed)
 
       print("------------")
 
-      
+    if solved and nGuess > 0:
+        
+      total_score = len(set(secret_word))*nGuess
+
+      print("Congratulations, you have won!")
+      print(f"Your total score for this game is : {total_score}")
+
+    else:
+        
+        print(f'Sorry, you ran out of guesses. The word was {secret_word}.')
+  
+
 
 
 # When you've completed your hangman function, scroll down to the bottom
@@ -316,7 +315,7 @@ if __name__ == "__main__":
     # uncomment the following two lines.
 
     secret_word = choose_word(wordlist)
-    secret_word = "tact"
+    secret_word = "else"
     hangman(secret_word)
 
 ###############
