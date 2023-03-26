@@ -257,6 +257,10 @@ def match_with_gaps(my_word, other_word):
     for g,w in zip(my_word,other_word):
 
             if g == "_":
+                
+                if w in my_word:
+                   
+                   return False
 
                 continue
 
@@ -279,8 +283,22 @@ def show_possible_matches(my_word):
              that has already been revealed.
 
     '''
-    # FILL IN YOUR CODE HERE AND DELETE "pass"
-    pass
+    cnt = 0
+
+    for word in wordlist:
+       
+       
+       if match_with_gaps(my_word,word):
+          
+          print(word)
+
+          cnt+=1
+        
+    if not cnt:
+       
+       print("No matches found")
+        
+          
 
 
 
@@ -311,9 +329,101 @@ def hangman_with_hints(secret_word):
     
     Follows the other limitations detailed in the problem write-up.
     '''
-    # FILL IN YOUR CODE HERE AND DELETE "pass"
-    pass
 
+    nGuess = 6
+    nWarning = 3
+    letters_guessed = []
+    available_letters = get_available_letters(letters_guessed)
+    solved = False
+
+    print("Welcome to the game Hangman!")
+    print(f"I am thinking of a word that is {len(secret_word)} letters long.")
+    print("-------------")
+    
+
+    while not solved:
+
+      print(f"You have {nGuess} guesses left.")
+      print(f"Available letters: {available_letters}")
+
+      guess = input("Please guess a letter: ").lower()
+      curr_ans = get_guessed_word(secret_word, letters_guessed)
+
+      if guess == "*":
+         curr_ans = get_guessed_word(secret_word, letters_guessed)
+         show_possible_matches(curr_ans)
+         print("------------")
+
+      else:
+          
+        if (not guess.isalpha()) or (guess in letters_guessed):
+            
+            if nWarning == 0:
+
+              nGuess -= 1
+
+              if not guess.isalpha():
+
+                print(f"Oops! That is not a valid letter. You have no warnings left so you lose one guess: {curr_ans}")
+            
+              elif guess in letters_guessed:
+
+                print(f"Oops! You've already guessed that letter. You have no warnings left so you lose one guess: {curr_ans}")
+
+            elif nWarning > 0:
+                
+              nWarning -= 1
+
+              if not guess.isalpha():
+
+                print(f"Oops! That is not a valid letter. You have {nWarning} warnings left: {curr_ans}")
+            
+              elif guess in letters_guessed:
+
+                print(f"Oops! You've already guessed that letter. You have {nWarning} warnings left: {curr_ans}")
+
+
+
+        else:
+          
+          letters_guessed.append(guess)
+          curr_ans = get_guessed_word(secret_word, letters_guessed)
+
+          if guess in secret_word:
+              
+              if is_word_guessed(secret_word,letters_guessed):
+                
+                solved = True
+                
+              print(f"Good guess: {curr_ans}")
+            
+          else:
+              
+              nGuess -= 1
+
+              if guess in ["a","e","i","u","o"]:
+                nGuess-=1
+
+              if nGuess <= 0:
+
+                solved = True
+                
+              print(f"Oops! That letter is not in my word: {curr_ans}")
+
+        available_letters = get_available_letters(letters_guessed)
+
+        print("------------")
+
+    if solved and nGuess > 0:
+        
+      total_score = len(set(secret_word))*nGuess
+
+      print("Congratulations, you have won!")
+      print(f"Your total score for this game is : {total_score}")
+
+    else:
+        
+        print(f'Sorry, you ran out of guesses. The word was {secret_word}.')
 
 
 # When you've completed your hangman_with_hint function, comment the two similar
@@ -336,9 +446,6 @@ if __name__ == "__main__":
     # To test part 3 re-comment out the above lines and 
     # uncomment the following two lines. 
     
-    print(match_with_gaps("te_t", "tact"))
-    print(match_with_gaps("a__le", "banana"))
-    print(match_with_gaps("a__le", "apple"))
-    print(match_with_gaps("a_ple", "apple"))
     secret_word = choose_word(wordlist)
+    secret_word = "apple"
     hangman_with_hints(secret_word)
