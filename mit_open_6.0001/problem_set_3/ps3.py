@@ -206,7 +206,20 @@ def update_hand(hand, word):
     returns: dictionary (string -> int)
     """
 
-    pass  # TO DO... Remove this line when you implement this function
+    new_hand = hand.copy()
+
+    for letter in word:
+        letter = letter.lower()
+        if letter not in new_hand.keys():
+            pass
+
+        else:
+            new_hand[letter] -= 1
+
+            if new_hand[letter] < 0:
+                new_hand.pop(letter)
+
+    return new_hand
 
 
 #
