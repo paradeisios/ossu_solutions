@@ -11,8 +11,8 @@ import numpy as np
 x = input("Enter number x: ")
 y = input("Enter number y: ")
 
-power = np.power(int(x),int(y))
-log   = np.log2(int(x))
+power = np.power(int(x), int(y))
+log = np.log2(int(x))
 
 print("x**y = {}".format(power))
 print("log(x) = {}".format(log))
