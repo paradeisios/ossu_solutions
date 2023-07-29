@@ -216,7 +216,7 @@ def update_hand(hand, word):
         else:
             new_hand[letter] -= 1
 
-            if new_hand[letter] < 0:
+            if new_hand[letter] <= 0:
                 new_hand.pop(letter)
 
     return new_hand
@@ -237,7 +237,17 @@ def is_valid_word(word, hand, word_list):
     returns: boolean
     """
 
-    pass  # TO DO... Remove this line when you implement this function
+    temp_hand = hand.copy()
+
+    if word.lower() not in word_list:
+        return False
+    else:
+        for letter in word:
+            letter = letter.lower()
+            if letter not in temp_hand.keys():
+                return False
+            temp_hand = update_hand(temp_hand, letter)
+    return True
 
 
 #
