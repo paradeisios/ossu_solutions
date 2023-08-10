@@ -42,6 +42,7 @@ SCRABBLE_LETTER_VALUES = {
     "x": 8,
     "y": 4,
     "z": 10,
+    "*": 0,
 }
 
 # -----------------------------------
@@ -181,7 +182,18 @@ def deal_hand(n):
         x = random.choice(CONSONANTS)
         hand[x] = hand.get(x, 0) + 1
 
-    return hand
+    wilcard_hand = hand.copy()
+    for key in wilcard_hand.keys():
+        if key in VOWELS:
+            wilcard_hand[key] -= 1
+
+            if wilcard_hand[key] <= 0:
+                wilcard_hand.pop(key)
+
+            wilcard_hand["*"] = 1
+
+        return wilcard_hand
+    return wilcard_hand
 
 
 #
@@ -239,14 +251,33 @@ def is_valid_word(word, hand, word_list):
 
     temp_hand = hand.copy()
 
-    if word.lower() not in word_list:
+    if "*" in word:
+        for vowel in VOWELS:
+            possible_word = word.replace("*", vowel)
+            if possible_word not in word_list:
+                pass
+            else:
+                for letter in possible_word:
+                    letter = letter.lower()
+                    if letter not in temp_hand.keys():
+                        if letter in VOWELS and "*" in temp_hand:
+                            temp_hand = update_hand(temp_hand, "*")
+                        else:
+                            return False
+                    else:
+                        temp_hand = update_hand(temp_hand, letter)
+                return True
         return False
     else:
-        for letter in word:
-            letter = letter.lower()
-            if letter not in temp_hand.keys():
-                return False
-            temp_hand = update_hand(temp_hand, letter)
+        if word.lower() not in word_list:
+            return False
+        else:
+            for letter in word:
+                letter = letter.lower()
+                if letter not in temp_hand.keys():
+                    return False
+
+                temp_hand = update_hand(temp_hand, letter)
     return True
 
 
