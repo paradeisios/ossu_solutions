@@ -413,12 +413,13 @@ def substitute_hand(hand, letter):
 
         if letter in CONSONANTS:
             new_letter = random.choice(CONSONANTS)
-            while new_letter in new_hand.keys():
+            while new_letter in hand.keys():
                 new_letter = random.choice(CONSONANTS)
 
         elif letter in VOWELS:
+            print("here")
             new_letter = random.choice(VOWELS)
-            while new_letter in new_hand.keys():
+            while new_letter in hand.keys():
                 new_letter = random.choice(VOWELS)
 
         return new_hand
@@ -455,9 +456,31 @@ def play_game(word_list):
     word_list: list of lowercase strings
     """
 
-    print(
-        "play_game not implemented."
-    )  # TO DO... Remove this line when you implement this function
+    games = input("Hello. How many rounds do you want to play? ")
+    total_score = 0
+    replay = True
+
+    for game in range(int(games)):
+        hand = deal_hand(n=HAND_SIZE)
+        display_hand(hand)
+        change = input("Do you want to substitute one letter (y/n)? ")
+        if change.lower() == "y":
+            letter = input("Select a letter to change:")
+            new_hand = substitute_hand(hand, letter)
+
+        game_score = play_hand(hand, word_list)
+
+        if replay:
+            q = input("Would you like to replay the game? ")
+            if q.lower() == "y":
+                hand = deal_hand(n=HAND_SIZE)
+                replay_score = play_hand(hand, word_list)
+
+                game_score = max([game_score, game_score])
+
+        total_score += game_score
+
+    print(f"Your total score is {total_score}")
 
 
 #
