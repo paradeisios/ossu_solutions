@@ -404,7 +404,24 @@ def substitute_hand(hand, letter):
     returns: dictionary (string -> int)
     """
 
-    pass  # TO DO... Remove this line when you implement this function
+    if letter not in hand:
+        return hand
+    else:
+        new_hand = hand.copy()
+        n = new_hand[letter]
+        new_hand.pop(letter)
+
+        if letter in CONSONANTS:
+            new_letter = random.choice(CONSONANTS)
+            while new_letter in new_hand.keys():
+                new_letter = random.choice(CONSONANTS)
+
+        elif letter in VOWELS:
+            new_letter = random.choice(VOWELS)
+            while new_letter in new_hand.keys():
+                new_letter = random.choice(VOWELS)
+
+        return new_hand
 
 
 def play_game(word_list):
@@ -450,6 +467,4 @@ def play_game(word_list):
 #
 if __name__ == "__main__":
     word_list = load_words()
-    # play_game(word_list)
-    hand = {"a": 1, "c": 1, "f": 1, "i": 1, "*": 1, "t": 1, "x": 1}
-    play_hand(hand, word_list)
+    play_game(word_list)
