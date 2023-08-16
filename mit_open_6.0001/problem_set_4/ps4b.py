@@ -221,7 +221,7 @@ class CiphertextMessage(Message):
             self.message_text (string, determined by input text)
             self.valid_words (list, determined using helper function load_words)
         """
-        pass  # delete this line and replace with your code here
+        super().__init__(text)
 
     def decrypt_message(self):
         """
@@ -239,28 +239,39 @@ class CiphertextMessage(Message):
         Returns: a tuple of the best shift value used to decrypt the message
         and the decrypted message text using that shift value
         """
-        pass  # delete this line and replace with your code here
+        res = dict()
+        for shift in range(1, 27):
+            res[shift] = 0
+            message_text_decrypted = self.apply_shift(shift)
+
+            temp_split = message_text_decrypted.split(" ")
+
+            print(temp_split)
+            for split in temp_split:
+                if split in self.get_valid_words():
+                    res[shift] += 1
+
+        best = sorted(res.items(), key=lambda x: x[1], reverse=True)[0][0]
+        return (best, self.apply_shift(best))
 
 
 if __name__ == "__main__":
     # Example test case (PlaintextMessage)
-    # plaintext = PlaintextMessage("hello", 2)
-    # print("Expected Output: jgnnq")
-    # print("Actual Output:", plaintext.get_message_text_encrypted())
-    #
-    #    #Example test case (CiphertextMessage)
-    #    ciphertext = CiphertextMessage('jgnnq')
-    #    print('Expected Output:', (24, 'hello'))
-    #    print('Actual Output:', ciphertext.decrypt_message())
-
     plaintext = PlaintextMessage("hello", 2)
-    print(plaintext.get_message_text())
-    print(plaintext.get_shift())
-    print(plaintext.get_encryption_dict())
-    print(plaintext.get_message_text_encrypted())
+    print("Expected Output: jgnnq")
+    print("Actual Output:", plaintext.get_message_text_encrypted())
 
-    print()
-    plaintext.change_shift(3)
-    print(plaintext.get_shift())
-    print(plaintext.get_encryption_dict())
-    print(plaintext.get_message_text_encrypted())
+    plaintext = PlaintextMessage("", 2)
+    print("Expected Output: ")
+    print("Actual Output:", plaintext.get_message_text_encrypted())
+    #
+    # Example test case (CiphertextMessage)
+    ciphertext = CiphertextMessage("jgnnq")
+    ciphertext.decrypt_message()
+    print("Expected Output:", (24, "hello"))
+    print("Actual Output:", ciphertext.decrypt_message())
+
+    ciphertext = CiphertextMessage("xlmw mw e qiwweki")
+    ciphertext.decrypt_message()
+    print("Expected Output:", (22, "this is a message"))
+    print("Actual Output:", ciphertext.decrypt_message())
